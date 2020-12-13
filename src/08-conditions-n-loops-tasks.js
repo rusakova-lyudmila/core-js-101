@@ -31,12 +31,15 @@ function getFizzBuzz(num) {
   if (num % 3 === 0 && num % 5 === 0) {
     return 'FizzBuzz';
   }
+
   if (num % 3 === 0) {
     return 'Fizz';
   }
+
   if (num % 5 === 0) {
     return 'Buzz';
   }
+
   return num;
 }
 
@@ -52,8 +55,14 @@ function getFizzBuzz(num) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  let resultFactorial = 1;
+
+  for (let i = 2; i <= n; i += 1) {
+    resultFactorial *= i;
+  }
+
+  return resultFactorial;
 }
 
 
@@ -69,8 +78,14 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let sum = n1;
+
+  for (let i = n1 + 1; i <= n2; i += 1) {
+    sum += i;
+  }
+
+  return sum;
 }
 
 
@@ -89,11 +104,18 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  if (a + b > c && a + c > b && b + c > a) {
+    return true;
+  }
+
+  return false;
 }
 
-
+function validate({ x, y }, rec2) {
+  return rec2.left <= x && x <= rec2.left + rec2.width
+    && rec2.top <= y && y <= rec2.top + rec2.height;
+}
 /**
  * Returns true, if two specified axis-aligned rectangles overlap, otherwise false.
  * Each rectangle representing by object
@@ -126,8 +148,15 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  return validate({ x: rect1.left, y: rect1.top }, rect2)
+    || validate({ x: rect1.left, y: rect1.top + rect1.height }, rect2)
+    || validate({ x: rect1.left + rect1.width, y: rect1.top }, rect2)
+    || validate({ x: rect1.left + rect1.width, y: rect1.top + rect1.height }, rect2)
+    || validate({ x: rect2.left, y: rect2.top }, rect1)
+    || validate({ x: rect2.left, y: rect2.top + rect2.height }, rect1)
+    || validate({ x: rect2.left + rect2.width, y: rect2.top }, rect1)
+    || validate({ x: rect2.left + rect2.width, y: rect2.top + rect2.height }, rect1);
 }
 
 
@@ -157,8 +186,13 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  if (Math.sqrt((circle.center.x - point.x) ** 2 + (circle.center.y - point.y) ** 2)
+  < circle.radius) {
+    return true;
+  }
+
+  return false;
 }
 
 
@@ -173,8 +207,21 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const strArray = str.replace(' ', '').split('');
+  const countObj = {};
+
+  strArray.forEach((item) => {
+    if (!Object.keys(countObj).includes(item)) {
+      countObj[item] = 1;
+    } else {
+      countObj[item] += 1;
+    }
+  });
+
+  const result = Object.keys(countObj).find((item) => countObj[item] === 1);
+
+  return result;
 }
 
 
@@ -200,8 +247,34 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let resultStr = '';
+
+  if (isStartIncluded) {
+    resultStr += '[';
+  }
+
+  if (isStartIncluded === false) {
+    resultStr += '(';
+  }
+
+  if (a > b) {
+    resultStr += `${b}, ${a}`;
+  }
+
+  if (a < b) {
+    resultStr += `${a}, ${b}`;
+  }
+
+  if (isEndIncluded) {
+    resultStr += ']';
+  }
+
+  if (isEndIncluded === false) {
+    resultStr += ')';
+  }
+
+  return resultStr;
 }
 
 
@@ -217,8 +290,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -234,8 +307,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return +num.toString().split('').reverse().join('');
 }
 
 
@@ -259,8 +332,25 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const strCCN = ccn.toString();
+  let sum = +strCCN[strCCN.length - 1];
+
+  for (let i = 0; i < strCCN.length - 1; i += 1) {
+    let value = +strCCN[strCCN.length - 2 - i];
+
+    if (i % 2 === 0) {
+      value *= 2;
+    }
+
+    if (value > 9) {
+      value -= 9;
+    }
+
+    sum += value;
+  }
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -277,8 +367,18 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function sumDigits(number) {
+  const numArray = number.toString().split('');
+  return numArray.reduce((sum, item) => sum + +item, 0);
+}
+function getDigitalRoot(num) {
+  let sum = sumDigits(num);
+
+  if (sum > 9) {
+    sum = sumDigits(sum);
+  }
+
+  return sum;
 }
 
 
@@ -303,8 +403,28 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const bracketsArray = ['[]', '{}', '()', '<>'];
+  const strArray = str.split('');
+  const resultArray = [];
+
+  strArray.forEach((item) => {
+    if (resultArray.length === 0) {
+      resultArray.push(item);
+    } else {
+      const prevElem = resultArray[resultArray.length - 1];
+      if (bracketsArray.includes(prevElem + item)) {
+        resultArray.pop();
+      } else {
+        resultArray.push(item);
+      }
+    }
+  });
+
+  if (resultArray.length === 0) {
+    return true;
+  }
+  return false;
 }
 
 
