@@ -448,8 +448,26 @@ function isBracketsBalanced(str) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function numberDivine(number, radix) {
+  return number % radix;
+}
+
+function toNaryString(num, n) {
+  const resultArray = [];
+  let remainderDivision = numberDivine(num, n);
+  resultArray.push(remainderDivision);
+  let wholeDivision = Math.floor(num / n);
+
+  while (wholeDivision >= n) {
+    const newNum = wholeDivision;
+    remainderDivision = numberDivine(wholeDivision, n);
+    resultArray.push(remainderDivision);
+    wholeDivision = Math.floor(newNum / n);
+  }
+
+  resultArray.push(wholeDivision);
+
+  return resultArray.reverse().join('').toString();
 }
 
 
@@ -465,8 +483,16 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const [firstPath, ...restPathes] = pathes.map((item) => item.split('/'));
+  const commonPath = firstPath.filter((item, ind) => restPathes.every((path) => path[ind] === item)).join('/');
+  const startSlash = pathes.filter((item) => item.slice(0, 1) === '/');
+
+  if (commonPath.length !== 0 || (commonPath.length === 0 && pathes.length === startSlash.length)) {
+    return commonPath.concat('/');
+  }
+
+  return commonPath;
 }
 
 
@@ -488,8 +514,19 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const resultMatrix = [];
+
+  m1.forEach((arr) => {
+    const resultArray = [];
+    for (let i = 0; i < m2[0].length; i += 1) {
+      const resultItem = arr.reduce((sum, item, indM2) => sum + item * m2[indM2][i], 0);
+      resultArray.push(resultItem);
+    }
+    resultMatrix.push(resultArray);
+  });
+
+  return resultMatrix;
 }
 
 
@@ -523,8 +560,68 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function winInRow(array) {
+  const xArray = array.filter((arr) => arr.every((item) => item === 'X') && arr.length === array.length);
+  const zeroArray = array.filter((arr) => arr.every((item) => item === '0') && arr.length === array.length);
+
+  if (xArray.length !== 0) {
+    return 'X';
+  }
+
+  if (zeroArray.length !== 0) {
+    return '0';
+  }
+
+  return undefined;
+}
+
+function winInColumn(array) {
+  const rowArray = [];
+
+  for (let i = 0; i < array.length; i += 1) {
+    const row = [];
+    for (let j = 0; j < array.length; j += 1) {
+      row.push(array[j][i]);
+    }
+    rowArray.push(row);
+  }
+
+  return winInRow(rowArray);
+}
+
+function winInDiagonal(array) {
+  const rowArray = [];
+  const rowLeftRight = [];
+  const rowRightLeft = [];
+
+  for (let i = 0; i < array.length; i += 1) {
+    rowLeftRight.push(array[i][i]);
+  }
+  rowArray.push(rowLeftRight);
+
+  for (let i = 0; i < array.length; i += 1) {
+    rowRightLeft.push(array[i][array.length - 1 - i]);
+  }
+  rowArray.push(rowRightLeft);
+  rowArray.push([]);
+
+  return winInRow(rowArray);
+}
+
+function evaluateTicTacToePosition(position) {
+  if (winInRow(position) !== undefined) {
+    return winInRow(position);
+  }
+
+  if (winInColumn(position) !== undefined) {
+    return winInColumn(position);
+  }
+
+  if (winInDiagonal(position) !== undefined) {
+    return winInDiagonal(position);
+  }
+
+  return undefined;
 }
 
 
